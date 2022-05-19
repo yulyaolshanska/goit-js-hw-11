@@ -1,0 +1,15 @@
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+}
+
+.photo-card {
+    width: calc((100% - 15px * 4) / 4 );
+    margin-right: 15px;
+}
