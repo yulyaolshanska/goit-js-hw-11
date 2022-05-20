@@ -14,14 +14,20 @@
   </head>
   <body>
     <form class="search-form" id="search-form">
-      <input type="text" name="query" autocomplete="off" placeholder="Search images..." />
-      <button type="submit">Search</button>
+      <input
+        class="search-input"
+        type="text"
+        name="query"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button class="search-btn" type="submit">Search</button>
     </form>
 
     <div class="gallery">
       <!-- Карточки изображений -->
     </div>
-    <button type="button" class="load-more">Load more</button>
+    <button type="button" class="load-more -is-hidden">Load more</button>
 
     <script src="./index.js"></script>
   </body>

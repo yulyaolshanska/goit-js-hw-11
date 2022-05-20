@@ -8,7 +8,7 @@ export default class ImagesApiService {
     
 }
     fetchImages() {
-    //    console.log(this)
+   
  return fetch(`${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=safesearch&page=${this.page}&per_page=40`).then(response => response.json())
     }
     
@@ -19,9 +19,12 @@ export default class ImagesApiService {
     set query(newQuery) {
         this.searchQuery = newQuery;
     }
-    incremenyPage() {
+    incrementPage() {
         this.page += 1;
         console.log(this.page)
+    }
+    resetPage() {
+         this.page = 1;
     }
 
   }  
