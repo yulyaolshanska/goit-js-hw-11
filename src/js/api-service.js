@@ -5,6 +5,7 @@ export default class ImagesApiService {
     constructor() {
         this.searchQuery = "";
         this.page = 1;
+        
     
 }
     fetchImages() {

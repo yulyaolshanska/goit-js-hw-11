@@ -18,6 +18,7 @@ const refs = {
 const imagesApiService = new ImagesApiService()
 let imgsArray = [];
 let gallery = null;
+let totalHits = null;
 
 refs.searchForm.addEventListener("submit", onFormSubmit);
 refs.loadMoreBtn.addEventListener("click", onLoadMore);
@@ -28,17 +29,34 @@ function onFormSubmit(evt) {
   clearImgContainer()
   imagesApiService.query = evt.currentTarget.elements.query.value;
   if (imagesApiService.query === "") {
-     Notiflix.Notify.warning(`Please, enter your request in the input field`);
+     Notiflix.Notify.warning(`Please, enter your request in the input field`, {
+          timeout: 4000,
+        });
     return
   } else {
     imagesApiService.resetPage()
     imagesApiService.fetchImages().then(images => {
+      totalHits = images.totalHits
+     
     imgsArray = images.hits;
     if (imgsArray.length === 0) {
         showMessage()
-    } else {
+      }
+      if (imgsArray.length < 40) {
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
+          timeout: 4000,
+        });
+        
         appendImagesMarkup(imgsArray);
-        newSimpleLightbox()
+        refs.loadMoreBtn.classList.add("-is-hidden");
+        newSimpleLightbox();
+   
+    } else {
+       Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
+          timeout: 4000,
+        });
+        appendImagesMarkup(imgsArray);
+        newSimpleLightbox();
     }
     }).catch(error => console.log(error));
   }
@@ -49,9 +67,17 @@ function onLoadMore() {
   imagesApiService.incrementPage();
   imagesApiService.fetchImages().then(images => {
    imgsArray = images.hits;
+    if (imgsArray.length < 40) {
+      Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`, {
+          timeout: 4000,
+      });
+      refs.loadMoreBtn.classList.add("-is-hidden");
+   }
    refs.galleryBox.insertAdjacentHTML("beforeend", renderGalleryMarkup(imgsArray));
    refreshSimpleLightbox();
-  })
+  }).catch(error => {
+      return console.log(error);
+    });
  
 }
 
@@ -67,7 +93,9 @@ function appendImagesMarkup(array) {
 }
 
 function showMessage() {
-    Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+    Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`, {
+          timeout: 4000,
+        });
 }
 
 

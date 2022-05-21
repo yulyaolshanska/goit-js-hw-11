@@ -20,7 +20,7 @@ ul {
         display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 15px;
+   padding: 90px 20px 20px;
     // margin: -15px;
 }
 
@@ -52,10 +52,16 @@ ul {
 
 }
 
+.search-form__wrapper {
+    position: fixed;
+    width: 100%;
+    ;
+}
 .search-form {
     
     display: flex;
     justify-content: center;
+    background-color: #84a6a6;
 }
 button {
     border-radius: 5px;
@@ -76,7 +82,7 @@ button {
 .load-more {
     display: block;
     border: #0093ffb3 2px solid;
-    margin: 30px auto;
+      margin: 0px auto 25px;
     
 }
 
