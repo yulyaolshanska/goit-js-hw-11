@@ -24,7 +24,7 @@ refs.searchForm.addEventListener("submit", onFormSubmit);
 refs.loadMoreBtn.addEventListener("click", onLoadMore);
 refs.galleryBox.addEventListener("click", onGalleryItemClick)
 
-function onFormSubmit(evt) {
+async function onFormSubmit(evt) {
   evt.preventDefault();
   clearImgContainer()
   imagesApiService.query = evt.currentTarget.elements.query.value;
@@ -35,15 +35,18 @@ function onFormSubmit(evt) {
     return
   } else {
     imagesApiService.resetPage()
-    imagesApiService.fetchImages().then(images => {
-      totalHits = images.totalHits
+    try {
+      
+      const data = await imagesApiService.fetchImages();
+      totalHits = data.totalHits;
      
-    imgsArray = images.hits;
-    if (imgsArray.length === 0) {
+      imgsArray = data.hits;
+     
+      if (imgsArray.length === 0) {
         showMessage()
       }
       if (imgsArray.length < 40) {
-      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
           timeout: 4000,
         });
         
@@ -51,33 +54,36 @@ function onFormSubmit(evt) {
         refs.loadMoreBtn.classList.add("-is-hidden");
         newSimpleLightbox();
    
-    } else {
-       Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
+      } else {
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {
           timeout: 4000,
         });
         appendImagesMarkup(imgsArray);
         newSimpleLightbox();
-    }
-    }).catch(error => console.log(error));
+      }
+    } catch (error) {
+      console.log(error)
+    };
   }
   
 }
 
-function onLoadMore() {
+async function onLoadMore() {
   imagesApiService.incrementPage();
-  imagesApiService.fetchImages().then(images => {
-   imgsArray = images.hits;
+  try {
+    const data = await imagesApiService.fetchImages()
+    imgsArray = data.hits;
     if (imgsArray.length < 40) {
       Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`, {
-          timeout: 4000,
+        timeout: 4000,
       });
       refs.loadMoreBtn.classList.add("-is-hidden");
-   }
-   refs.galleryBox.insertAdjacentHTML("beforeend", renderGalleryMarkup(imgsArray));
-   refreshSimpleLightbox();
-  }).catch(error => {
+    }
+    refs.galleryBox.insertAdjacentHTML("beforeend", renderGalleryMarkup(imgsArray));
+    refreshSimpleLightbox();
+  } catch(error) {
       return console.log(error);
-    });
+    };
  
 }
 
